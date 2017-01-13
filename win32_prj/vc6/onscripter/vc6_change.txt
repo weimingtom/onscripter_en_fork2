@@ -43,3 +43,28 @@ ONScripterLabel_text.obj : error LNK2001: unresolved external symbol _TTF_GlyphM
 ONScripterLabel_text.obj : error LNK2001: unresolved external symbol _TTF_RenderGlyph_Shaded
 ONScripterLabel_text.obj : error LNK2001: unresolved external symbol _TTF_FontAscent
 
+----------------------
+[20170114]
+
+932->936
+
+    int wc_size = MultiByteToWideChar(936/*932*/, 0, src_buf, -1, NULL, 0);
+    wchar_t *u16_tmp = new wchar_t[wc_size];
+    MultiByteToWideChar(936/*932*/, 0, src_buf, -1, u16_tmp, wc_size);
+    int mb_size = WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, 0, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, mb_size, NULL, NULL);
+    delete[] u16_tmp;
+
+
+breakpoint:
+	SDL_SetVideoMode
+
+breakpoint:
+	setScaled
+	scaled_flag
+
+breakpoint:
+	TTF_GlyphMetrics
+
+
+

@@ -669,7 +669,8 @@ ONScripterLabel::ONScripterLabel()
 #endif
   movie_buffer(NULL), async_movie_surface(NULL),
   surround_rects(NULL),
-  text_font(NULL), cached_page(NULL), system_menu_title(NULL)
+  text_font(NULL), cached_page(NULL), system_menu_title(NULL),
+  scaled_flag(false)
 {
     //first initialize *everything* (static) to base values
 

@@ -96,11 +96,6 @@ SOURCE=..\..\..\AnimationInfo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\AVIWrapper.cpp
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\DirectReader.cpp
 # End Source File
 # Begin Source File
@@ -110,11 +105,6 @@ SOURCE=..\..\..\DirPaths.cpp
 # Begin Source File
 
 SOURCE=..\..\..\DirtyRect.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\embed.cpp
-# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -138,22 +128,7 @@ SOURCE=..\..\..\Layer.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\LUAHandler.cpp
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\MadWrapper.cpp
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\NsaReader.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\nscriptdecode.cpp
-# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -229,11 +204,6 @@ SOURCE=..\..\..\ScriptParser_command.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\SDL_win32_main.c
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\sjis2utf16.cpp
 # End Source File
 # End Group
@@ -243,10 +213,6 @@ SOURCE=..\..\..\sjis2utf16.cpp
 # Begin Source File
 
 SOURCE=..\..\..\AnimationInfo.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\AVIWrapper.h
 # End Source File
 # Begin Source File
 
@@ -287,14 +253,6 @@ SOURCE=..\..\..\graphics_sse2.h
 # Begin Source File
 
 SOURCE=..\..\..\Layer.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\LUAHandler.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\MadWrapper.h
 # End Source File
 # Begin Source File
 
