@@ -354,10 +354,6 @@ SOURCE=.\SDL_win32_main.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\arc.nsa
-# End Source File
-# Begin Source File
-
 SOURCE=.\default.ttf
 # End Source File
 # Begin Source File
@@ -367,23 +363,7 @@ SOURCE=.\vc6_change.txt
 # End Group
 # Begin Source File
 
-SOURCE=..\..\..\BUGS
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\CHANGES
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\config.guess
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\config.sub
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\configure
 # End Source File
 # Begin Source File
 
@@ -395,23 +375,7 @@ SOURCE=..\..\..\INSTALL
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\install-sh"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Makefile.extlibs
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Makefile.onscripter
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ons-en.png"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\onscripter.rc.in
 # End Source File
 # Begin Source File
 
