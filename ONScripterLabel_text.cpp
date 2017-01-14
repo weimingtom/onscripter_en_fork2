@@ -41,6 +41,7 @@
 #include "ONScripterLabel.h"
 
 #ifdef _MSC_VER
+#include <windows.h>
 #define snprintf _snprintf
 #endif
 
@@ -117,6 +118,7 @@ void ONScripterLabel::drawGlyph( SDL_Surface *dst_surface, Fontinfo *info, SDL_C
         return;
 
     unsigned short unicode;
+#if 0
     if (IS_TWO_BYTE(text[0])){
         unsigned index = ((unsigned char*)text)[0];
         index = index << 8 | ((unsigned char*)text)[1];
@@ -125,6 +127,22 @@ void ONScripterLabel::drawGlyph( SDL_Surface *dst_surface, Fontinfo *info, SDL_C
     else{
         unicode = convSJIS2UTF16( ((unsigned char*)text)[0] );
     }
+#else
+	{
+		char text2[3] = {0};
+		text2[0] = text[0];
+		text2[1] = text[1];
+		text2[2] = 0;
+		int wc_size = MultiByteToWideChar(936/*932*/, 0, text2, -1, NULL, 0);
+		wchar_t *u16_tmp = new wchar_t[wc_size];
+		MultiByteToWideChar(936/*932*/, 0, text2, -1, u16_tmp, wc_size);
+		unsigned short unicode2 = (unsigned short)*u16_tmp;
+		delete[] u16_tmp;
+		//unicode = text2[0] << 8 | text2[1];
+		unicode = unicode2;
+		//unicode = (unicode2 & 0xff) << 8 | ((unicode2 >> 8) & 0xff);
+	}
+#endif
 
     int minx, maxx, miny, maxy, advanced;
 #if 0

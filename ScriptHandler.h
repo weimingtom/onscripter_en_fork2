@@ -46,8 +46,11 @@
 
 #define VARIABLE_RANGE 4096
 
+//#define IS_TWO_BYTE(x) \
+//        ( ((x) & 0xe0) == 0xe0 || ((x) & 0xe0) == 0x80 )
 #define IS_TWO_BYTE(x) \
-        ( ((x) & 0xe0) == 0xe0 || ((x) & 0xe0) == 0x80 )
+        ( ((x) & 0xe0) == 0xe0 || ((x) & 0xe0) == 0x80 || \
+			(((x) & 0xff) >=0xA1 && ((x) & 0xff) <=0xFE) )
 
 #define MAX_ERRBUF_LEN 512
 
