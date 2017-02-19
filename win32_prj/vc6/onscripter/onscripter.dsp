@@ -284,6 +284,10 @@ SOURCE=.\SDL_win32_main.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\0.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\default.ttf
 # End Source File
 # Begin Source File
