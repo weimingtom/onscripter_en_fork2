@@ -45,19 +45,6 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#if defined(USE_GLUT)
-#else
-#include <SDL_mixer.h>
-#endif
-
-#if defined(USE_GLUT)
-#else
-#ifdef MP3_MAD
-#include "MadWrapper.h"
-#else
-#include <smpeg.h>
-#endif
-#endif
 
 #define DEFAULT_VIDEO_SURFACE_FLAG (SDL_SWSURFACE)
 
@@ -414,10 +401,6 @@ protected:
     bool waitEvent(int count);
     void trapHandler();
     void initSDL();
-#if defined(USE_GLUT)
-#else
-    void openAudio(int freq=DEFAULT_AUDIO_RATE, Uint16 format=MIX_DEFAULT_FORMAT, int channels=MIX_DEFAULT_CHANNELS);
-#endif
 
 private:
     enum {
@@ -935,10 +918,6 @@ private:
 
     bool seqmusic_play_loop_flag;
     char *seqmusic_file_name;
-#if defined(USE_GLUT)
-#else
-    Mix_Music *seqmusic_info;
-#endif
 
     SDL_CD *cdrom_info;
     int current_cd_track;
@@ -948,34 +927,18 @@ private:
     char *music_file_name;
     unsigned char *music_buffer; // for looped music
     long music_buffer_length;
-#if defined(USE_GLUT)
-#else
-    SMPEG *mp3_sample;
-#endif
     Uint32 mp3fade_start;
     Uint32 mp3fadeout_duration;
     Uint32 mp3fadein_duration;
-#if defined(USE_GLUT)
-#else
-    Mix_Music *music_info;
-#endif
     char *loop_bgm_name[2];
 
     int channelvolumes[ONS_MIX_CHANNELS]; //insani's addition
-#if defined(USE_GLUT)
-#else
-    Mix_Chunk *wave_sample[ONS_MIX_CHANNELS+ONS_MIX_EXTRA_CHANNELS];
-#endif
 
     char *music_cmd;
     char *seqmusic_cmd;
 
     int playSound(const char *filename, int format, bool loop_flag, int channel=0);
     void playCDAudio();
-#if defined(USE_GLUT)
-#else
-    int playWave(Mix_Chunk *chunk, int format, bool loop_flag, int channel);
-#endif
     int playMP3();
     int playOGG(int format, unsigned char *buffer, long length, bool loop_flag, int channel);
     int playExternalMusic(bool loop_flag);
@@ -998,10 +961,6 @@ private:
 
     /* ---------------------------------------- */
     /* Movie related variables */
-#if defined(USE_GLUT)
-#else
-    SMPEG *async_movie;
-#endif
     unsigned char *movie_buffer;
     SDL_Surface *async_movie_surface;
     SDL_Rect async_movie_rect;
@@ -1009,10 +968,6 @@ private:
     bool movie_click_flag, movie_loop_flag;
     int playMPEG( const char *filename, bool async_flag, bool use_pos=false, int xpos=0, int ypos=0, int width=0, int height=0 );
     int playAVI( const char *filename, bool click_flag );
-#if defined(USE_GLUT)
-#else
-    void stopMovie(SMPEG *mpeg);
-#endif
 
     /* ---------------------------------------- */
     /* Text event related variables */

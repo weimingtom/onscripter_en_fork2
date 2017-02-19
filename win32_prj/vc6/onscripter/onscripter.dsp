@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\bzip2-1.0.4" /I "..\..\..\extlib\src\freetype-2.3.5\include" /I "..\..\..\extlib\src\jpeg-6b" /I "..\jpeg" /I "..\..\..\extlib\src\libogg-1.1.3\include" /I "..\..\..\extlib\src\libpng-1.2.24" /I "..\..\..\extlib\src\libvorbis-1.2.0\include" /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\..\..\extlib\src\SDL_image-1.2.6" /I "..\..\..\extlib\src\SDL_mixer-1.2.8" /I "..\..\..\extlib\src\SDL_ttf-2.0.8" /I "..\..\..\extlib\src\smpeg" /I "..\..\..\extlib\src\zlib-1.2.3" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "USE_OGG_VORBIS" /D DECLSPEC="" /D "USE_GLUT" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\bzip2-1.0.4" /I "..\..\..\extlib\src\freetype-2.3.5\include" /I "..\..\..\extlib\src\jpeg-6b" /I "..\jpeg" /I "..\..\..\extlib\src\libogg-1.1.3\include" /I "..\..\..\extlib\src\libpng-1.2.24" /I "..\..\..\extlib\src\libvorbis-1.2.0\include" /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\..\..\extlib\src\SDL_image-1.2.6" /I "..\..\..\extlib\src\SDL_mixer-1.2.8" /I "..\..\..\extlib\src\SDL_ttf-2.0.8" /I "..\..\..\extlib\src\smpeg" /I "..\..\..\extlib\src\zlib-1.2.3" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "USE_OGG_VORBIS" /D DECLSPEC="" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x804 /d "_DEBUG"
@@ -109,18 +109,6 @@ SOURCE=..\..\..\DirtyRect.cpp
 # Begin Source File
 
 SOURCE=..\..\..\FontInfo.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\graphics_altivec.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\graphics_mmx.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\graphics_sse2.cpp
 # End Source File
 # Begin Source File
 
@@ -202,10 +190,6 @@ SOURCE=..\..\..\ScriptParser.cpp
 
 SOURCE=..\..\..\ScriptParser_command.cpp
 # End Source File
-# Begin Source File
-
-SOURCE=..\..\..\sjis2utf16.cpp
-# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -236,19 +220,7 @@ SOURCE=..\..\..\FontInfo.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\graphics_altivec.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\graphics_common.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\graphics_mmx.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\graphics_sse2.h
 # End Source File
 # Begin Source File
 

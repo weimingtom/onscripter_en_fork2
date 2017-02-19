@@ -93,14 +93,7 @@ extern long decodeOggVorbis(ONScripterLabel::MusicStruct *music_struct, Uint8 *b
  * **************************************** */
 extern "C" void mp3callback( void *userdata, Uint8 *stream, int len )
 {
-#if defined(USE_GLUT)
-#else
-    if ( SMPEG_playAudio( (SMPEG*)userdata, stream, len ) == 0 ){
-        SDL_Event event;
-        event.type = ONS_SOUND_EVENT;
-        SDL_PushEvent(&event);
-    }
-#endif
+
 }
 
 extern "C" void oggcallback( void *userdata, Uint8 *stream, int len )
@@ -168,20 +161,10 @@ extern "C" Uint32 SDLCALL bgmfadeCallback( Uint32 interval, void *param )
 
 extern "C" Uint32 SDLCALL silentmovieCallback( Uint32 interval, void *param )
 {
-#if defined(USE_GLUT)
 	if (1) {
         clearTimer( timer_silentmovie_id );
         return 0;
     }
-#else
-    SMPEG **mpeg = (SMPEG **)param;
-    if (*mpeg && (SMPEG_status(*mpeg) != SMPEG_PLAYING)){
-        SMPEG_play( *mpeg );
-    } else if (*mpeg == NULL){
-        clearTimer( timer_silentmovie_id );
-        return 0;
-    }
-#endif
 
     return interval;
 }
@@ -351,13 +334,7 @@ void ONScripterLabel::flushEventSub( SDL_Event &event )
 {
     //event related to streaming media
     if ( event.type == ONS_SOUND_EVENT ){
-#if defined(USE_GLUT)
 		if (0) {
-#else
-        if (async_movie) {
-            if ((SMPEG_status(async_movie) != SMPEG_PLAYING) && (movie_loop_flag))
-                SMPEG_play( async_movie );
-#endif
         } else if ( music_play_loop_flag ||
              (cd_play_loop_flag && !cdaudio_flag ) ){
             stopBGM( true );
@@ -449,43 +426,15 @@ void ONScripterLabel::flushEventSub( SDL_Event &event )
         }
 #else
         ext_music_play_once_flag = !seqmusic_play_loop_flag;
-#if defined(USE_GLUT)
-#else
-        Mix_FreeMusic( seqmusic_info );
-#endif
         playSequencedMusic(seqmusic_play_loop_flag);
 #endif
     }
     else if ( event.type == ONS_MUSIC_EVENT ){
         ext_music_play_once_flag = !music_play_loop_flag;
-#if defined(USE_GLUT)
-#else
-        Mix_FreeMusic(music_info);
-#endif
         playExternalMusic(music_play_loop_flag);
     }
     else if ( event.type == ONS_WAVE_EVENT ){ // for processing btntime2 and automode correctly
-#if defined(USE_GLUT)
-#else
-        if ( wave_sample[event.user.code] ){
-#if defined(USE_GLUT)
-#else
-            Mix_FreeChunk( wave_sample[event.user.code] );
-#endif
-            wave_sample[event.user.code] = NULL;
-            if (event.user.code == MIX_LOOPBGM_CHANNEL0 &&
-                loop_bgm_name[1] &&
-                wave_sample[MIX_LOOPBGM_CHANNEL1])
-#if defined(USE_GLUT)
-#else
-                Mix_PlayChannel(MIX_LOOPBGM_CHANNEL1,
-                                wave_sample[MIX_LOOPBGM_CHANNEL1], -1);
-#endif
-            if ((event.user.code == 0) && bgmdownmode_flag){
-                setCurMusicVolume( music_volume );
-            }
-        }
-#endif
+	
     }
 }
 
@@ -730,10 +679,6 @@ void ONScripterLabel::variableEditMode( SDL_KeyboardEvent *event )
     if (event_mode & WAIT_BUTTON_MODE)
         last_keypress = KEYPRESS_NULL;
 
-#if defined(USE_GLUT)
-#else
-    int  i;
-#endif
     const char* var_name;
     char var_index[12];
 
@@ -816,25 +761,10 @@ void ONScripterLabel::variableEditMode( SDL_KeyboardEvent *event )
 
           case EDIT_SE_VOLUME_MODE:
             se_volume = variable_edit_num;
-#if defined(USE_GLUT)
-#else
-            for ( i=1 ; i<ONS_MIX_CHANNELS ; i++ )
-                if ( wave_sample[i] )
-                    Mix_Volume( i, !volume_on_flag? 0 : se_volume * 128 / 100 );
-			if ( wave_sample[MIX_LOOPBGM_CHANNEL0] )
-                Mix_Volume( MIX_LOOPBGM_CHANNEL0, !volume_on_flag? 0 : se_volume * 128 / 100 );
-            if ( wave_sample[MIX_LOOPBGM_CHANNEL1] )
-                Mix_Volume( MIX_LOOPBGM_CHANNEL1, !volume_on_flag? 0 : se_volume * 128 / 100 );
-#endif
             break;
 
           case EDIT_VOICE_VOLUME_MODE:
             voice_volume = variable_edit_num;
-#if defined(USE_GLUT)
-#else
-            if ( wave_sample[0] )
-                Mix_Volume( 0, !volume_on_flag? 0 : voice_volume * 128 / 100 );
-#endif
 			break;
 
           default:
@@ -1557,12 +1487,6 @@ void ONScripterLabel::runEventLoop()
                 voice_just_ended = true;
             event_mode &= ~WAIT_VOICE_MODE;
           case ONS_BREAK_EVENT:
-#if defined(USE_GLUT)
-#else
-            if ((event_mode & WAIT_VOICE_MODE) && wave_sample[0]){
-                break;
-            }
-#endif
             if (voice_just_ended) {
                 clearTimer(break_id);
                 if (automode_flag && (automode_time > 0)) {

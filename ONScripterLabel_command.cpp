@@ -158,14 +158,6 @@ int ONScripterLabel::waveCommand()
 
 int ONScripterLabel::wavestopCommand()
 {
-#if defined(USE_GLUT)
-#else
-    if ( audio_open_flag && wave_sample[MIX_WAVE_CHANNEL] ){
-        Mix_Pause( MIX_WAVE_CHANNEL );
-        Mix_FreeChunk( wave_sample[MIX_WAVE_CHANNEL] );
-        wave_sample[MIX_WAVE_CHANNEL] = NULL;
-    }
-#endif
     setStr( &wave_file_name, NULL );
 
     return RET_CONTINUE;
@@ -232,13 +224,6 @@ int ONScripterLabel::vspCommand()
 int ONScripterLabel::voicevolCommand()
 {
     voice_volume = script_h.readInt();
-
-#if defined(USE_GLUT)
-
-#else
-    if ( wave_sample[0] )
-        Mix_Volume( 0, !volume_on_flag? 0 : voice_volume * 128 / 100 );
-#endif
 
     channelvolumes[0] = voice_volume;
 
@@ -871,21 +856,8 @@ int ONScripterLabel::sevolCommand()
     se_volume = script_h.readInt();
 
     for ( int i=1 ; i<ONS_MIX_CHANNELS ; i++ ) {
-#if defined(USE_GLUT)
-#else
-        if ( wave_sample[i] )
-            Mix_Volume( i, !volume_on_flag? 0 : se_volume * 128 / 100 );
-#endif
         channelvolumes[i] = se_volume;
     }
-
-#if defined(USE_GLUT)
-#else
-    if ( wave_sample[MIX_LOOPBGM_CHANNEL0] )
-        Mix_Volume( MIX_LOOPBGM_CHANNEL0, !volume_on_flag? 0 : se_volume * 128 / 100 );
-    if ( wave_sample[MIX_LOOPBGM_CHANNEL1] )
-        Mix_Volume( MIX_LOOPBGM_CHANNEL1, !volume_on_flag? 0 : se_volume * 128 / 100 );
-#endif
 
     return RET_CONTINUE;
 }
@@ -1393,15 +1365,6 @@ int ONScripterLabel::resetCommand()
     window_effect.effect = effect;
     window_effect.duration = duration;
     //reopen the audio mixer with default settings, if needed
-#if defined(USE_GLUT)
-#else
-    if ((audio_format.format != MIX_DEFAULT_FORMAT) ||
-        (audio_format.channels != MIX_DEFAULT_CHANNELS) ||
-        (audio_format.freq != DEFAULT_AUDIO_RATE)) {
-        Mix_CloseAudio();
-        openAudio();
-    }
-#endif
     mp3fadeout_duration = fadeout;
     clearCurrentPage();
     string_buffer_offset = 0;
@@ -1739,12 +1702,6 @@ int ONScripterLabel::mp3Command()
         if (mp3fadein_duration > 0) {
             music_volume = 0;
         }
-#if defined(USE_GLUT)
-#else
-        if (music_struct.voice_sample && *(music_struct.voice_sample)) {
-            music_volume /= 2;
-        }
-#endif
 
         playSound(music_file_name,
                   SOUND_WAVE | SOUND_OGG_STREAMING | SOUND_MP3 | SOUND_SEQMUSIC,
@@ -1776,11 +1733,6 @@ int ONScripterLabel::movieCommand()
     } else {
         if ( script_h.compareString( "stop" ) ){
             script_h.readName();
-#if defined(USE_GLUT)
-#else
-            if (async_movie) stopMovie(async_movie);
-            async_movie = NULL;
-#endif
             return RET_CONTINUE;
         }
     }
@@ -1906,19 +1858,6 @@ int ONScripterLabel::mesboxCommand()
 int ONScripterLabel::menu_windowCommand()
 {
     if ( fullscreen_mode ){
-#if defined(USE_GLUT)
-#else
-#ifndef PSP
-        if (async_movie) SMPEG_pause( async_movie );
-        screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG );
-        SDL_Rect rect = {0, 0, screen_width, screen_height};
-        flushDirect( rect, refreshMode() );
-        if (async_movie){
-            SMPEG_setdisplay( async_movie, screen_surface, NULL, NULL );
-            SMPEG_play( async_movie );
-        }
-#endif
-#endif
         fullscreen_mode = false;
     }
 
@@ -1944,28 +1883,6 @@ int ONScripterLabel::menu_waveoffCommand()
 int ONScripterLabel::menu_fullCommand()
 {
     if ( !fullscreen_mode ){
-#if defined(USE_GLUT)
-#else
-#ifndef PSP
-        if (async_movie) SMPEG_pause( async_movie );
-        screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG|SDL_FULLSCREEN );
-        if (screen_surface)
-            fullscreen_mode = true;
-        else {
-            fprintf(stderr, "*** menu_full: Error: %s (using windowed surface instead) ***\n", SDL_GetError());
-            screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG );
-            fullscreen_mode = false;
-        }
-        SDL_Rect rect = {0, 0, screen_width, screen_height};
-        flushDirect( rect, refreshMode() );
-        if (async_movie){
-            SMPEG_setdisplay( async_movie, screen_surface, NULL, NULL );
-            SMPEG_play( async_movie );
-        }
-#else
-        fullscreen_mode = true;
-#endif
-#endif
     }
 
     return RET_CONTINUE;
@@ -2111,19 +2028,6 @@ int ONScripterLabel::lspCommand()
 
 int ONScripterLabel::loopbgmstopCommand()
 {
-#if defined(USE_GLUT)
-#else
-    if ( wave_sample[MIX_LOOPBGM_CHANNEL0] ){
-        Mix_Pause(MIX_LOOPBGM_CHANNEL0);
-        Mix_FreeChunk( wave_sample[MIX_LOOPBGM_CHANNEL0] );
-        wave_sample[MIX_LOOPBGM_CHANNEL0] = NULL;
-    }
-    if ( wave_sample[MIX_LOOPBGM_CHANNEL1] ){
-        Mix_Pause(MIX_LOOPBGM_CHANNEL1);
-        Mix_FreeChunk( wave_sample[MIX_LOOPBGM_CHANNEL1] );
-        wave_sample[MIX_LOOPBGM_CHANNEL1] = NULL;
-    }
-#endif
     setStr(&loop_bgm_name[0], NULL);
 
     return RET_CONTINUE;
@@ -3393,14 +3297,6 @@ int ONScripterLabel::dwavestopCommand()
     if (ch < 0) ch = 0;
     else if (ch >= ONS_MIX_CHANNELS) ch = ONS_MIX_CHANNELS-1;
 
-#if defined(USE_GLUT)
-#else
-    if ( wave_sample[ch] ){
-        Mix_Pause( ch );
-        Mix_FreeChunk( wave_sample[ch] );
-        wave_sample[ch] = NULL;
-    }
-#endif
     if ((ch == 0) && bgmdownmode_flag)
         setCurMusicVolume( music_volume );
 
@@ -3432,10 +3328,7 @@ int ONScripterLabel::dwaveCommand()
     else if (ch >= ONS_MIX_CHANNELS) ch = ONS_MIX_CHANNELS-1;
 
     if (play_mode == WAVE_PLAY_LOADED){
-#if defined(USE_GLUT)
-#else
-        Mix_PlayChannel(ch, wave_sample[ch], loop_flag?-1:0);
-#endif
+
     }
     else{
         const char *buf = script_h.readStr();
@@ -3628,16 +3521,6 @@ int ONScripterLabel::defineresetCommand()
     ScriptParser::reset();
     reset();
     //reopen the audio mixer with default settings, if needed
-#if defined(USE_GLUT)
-#else
-    if (audio_open_flag &&
-        ( (audio_format.format != MIX_DEFAULT_FORMAT) ||
-          (audio_format.channels != MIX_DEFAULT_CHANNELS) ||
-          (audio_format.freq != DEFAULT_AUDIO_RATE) )) {
-        Mix_CloseAudio();
-        openAudio();
-    }
-#endif
 
     setCurrentLabel( "define" );
 
@@ -3807,13 +3690,6 @@ int ONScripterLabel::chvolCommand()
     if (ch < 0) ch = 0;
     else if (ch >= ONS_MIX_CHANNELS) ch = ONS_MIX_CHANNELS-1;
     int vol = script_h.readInt();
-
-#if defined(USE_GLUT)
-#else
-    if ( wave_sample[ch] ){
-        Mix_Volume( ch, !volume_on_flag? 0 : vol * 128 / 100 );
-    }
-#endif
 
     channelvolumes[ch] = vol;
 
@@ -4324,13 +4200,6 @@ int ONScripterLabel::bltCommand()
 int ONScripterLabel::bgmdownmodeCommand()
 {
     bgmdownmode_flag = (script_h.readInt() != 0);
-#if defined(USE_GLUT)
-#else
-    if (bgmdownmode_flag)
-        music_struct.voice_sample = &wave_sample[0];
-    else
-        music_struct.voice_sample = NULL;
-#endif
 
     return RET_CONTINUE;
 }

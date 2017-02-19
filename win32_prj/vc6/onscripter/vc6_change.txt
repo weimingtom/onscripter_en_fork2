@@ -169,3 +169,75 @@ void ONScripterLabel::drawGlyph( SDL_Surface *dst_surface, Fontinfo *info, SDL_C
 #endif
 
 ------------------------------------
+
+remove:
+USE_X86_GFX
+USE_PPC_GFX
+
+#if defined(USE_X86_GFX)
+#include "graphics_mmx.h"
+#include "graphics_sse2.h"
+#endif
+
+#if defined(USE_PPC_GFX)
+#include "graphics_altivec.h"
+#endif
+
+-------------------------------
+
+
+sjis2utf16.cpp:
+void initSJIS2UTF16()
+unsigned short convSJIS2UTF16( unsigned short in )
+int convUTF16ToUTF8( unsigned char dst[4], unsigned short src )
+
+
+void ONScripterLabel::initSDL()
+{
+...
+#if defined(WIN32)
+#else
+    initSJIS2UTF16();
+#endif
+...
+}
+
+void DirectReader::convertFromSJISToUTF8( char *dst_buf, char *src_buf )
+{
+#if defined(RECODING_FILENAMES) || defined(UTF8_FILESYSTEM)
+#if defined(MACOSX)
+    ONSCocoa::sjis_to_utf8(dst_buf, src_buf);
+#else
+    //Mion: ogapee 20100711a
+    int i, c;
+    unsigned short unicode;
+    unsigned char utf8_buf[4];
+    
+    while(*src_buf){
+        if (IS_TWO_BYTE(*src_buf)){
+            unsigned short index = *(unsigned char*)src_buf++;
+            index = index << 8 | (*(unsigned char*)src_buf++);
+            unicode = convSJIS2UTF16( index );
+            c = convUTF16ToUTF8(utf8_buf, unicode);
+            for (i=0 ; i<c ; i++)
+                *dst_buf++ = utf8_buf[i];
+        }
+        else{
+            *dst_buf++ = *src_buf++;
+        }
+    }
+    *dst_buf++ = 0;
+#endif //MACOSX
+#elif defined(WIN32)
+    int wc_size = MultiByteToWideChar(936/*932*/, 0, src_buf, -1, NULL, 0);
+    wchar_t *u16_tmp = new wchar_t[wc_size];
+    MultiByteToWideChar(936/*932*/, 0, src_buf, -1, u16_tmp, wc_size);
+    int mb_size = WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, 0, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, mb_size, NULL, NULL);
+    delete[] u16_tmp;
+#endif //RECODING_FILENAMES || UTF8_FILESYSTEM, WIN32
+}
+
+-------------------------------
+
+USE_GLUT

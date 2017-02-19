@@ -78,7 +78,10 @@ typedef HRESULT (WINAPI *GETFOLDERPATH)(HWND, int, HANDLE, DWORD, LPTSTR);
 #define snprintf _snprintf
 #endif
 
+#if defined(WIN32)
+#else
 extern void initSJIS2UTF16();
+#endif
 extern "C" void waveCallback( int channel );
 
 #define DEFAULT_AUDIOBUF 2048
@@ -578,47 +581,15 @@ void ONScripterLabel::initSDL()
     }
     //printf("Display: %d x %d (%d bpp)\n", screen_width, screen_height, screen_bpp);
     dirty_rect.setDimension(screen_width, screen_height);
-
+#if defined(WIN32)
+#else
     initSJIS2UTF16();
+#endif
 
     setStr(&wm_title_string, DEFAULT_WM_TITLE);
     setStr(&wm_icon_string, DEFAULT_WM_ICON);
     SDL_WM_SetCaption( wm_title_string, wm_icon_string );
-
-#if defined(USE_GLUT)
-#else
-    openAudio();
-#endif
 }
-
-#if defined(USE_GLUT)
-#else
-void ONScripterLabel::openAudio(int freq, Uint16 format, int channels)
-{
-    if ( Mix_OpenAudio( freq, format, channels, DEFAULT_AUDIOBUF ) < 0 ){
-        errorAndCont("Couldn't open audio device!", SDL_GetError(), "Init Error", true);
-        audio_open_flag = false;
-    }
-    else{
-        int freq;
-        Uint16 format;
-        int channels;
-
-        Mix_QuerySpec( &freq, &format, &channels);
-        //printf("Audio: %d Hz %d bit %s\n", freq,
-        //       (format&0xFF),
-        //       (channels > 1) ? "stereo" : "mono");
-        audio_format.format = format;
-        audio_format.freq = freq;
-        audio_format.channels = channels;
-
-        audio_open_flag = true;
-
-        Mix_AllocateChannels( ONS_MIX_CHANNELS+ONS_MIX_EXTRA_CHANNELS );
-        Mix_ChannelFinished( waveCallback );
-    }
-}
-#endif
 
 int ONScripterLabel::ExpandPos(int val) {
     return float(val * screen_ratio1) / screen_ratio2 + 0.5;
@@ -651,22 +622,9 @@ ONScripterLabel::ONScripterLabel()
   breakup_cells(NULL), breakup_cellforms(NULL), breakup_mask(NULL),
   shelter_select_link(NULL), default_cdrom_drive(NULL),
   wave_file_name(NULL), seqmusic_file_name(NULL), 
-#if defined(USE_GLUT)
-#else  
-  seqmusic_info(NULL),
-#endif  
   cdrom_info(NULL),
   music_file_name(NULL), music_buffer(NULL),
-#if defined(USE_GLUT)
-#else  
-  mp3_sample(NULL),
-  music_info(NULL), 
-#endif
   music_cmd(NULL), seqmusic_cmd(NULL),
-#if defined(USE_GLUT)
-#else
-  async_movie(NULL), 
-#endif
   movie_buffer(NULL), async_movie_surface(NULL),
   surround_rects(NULL),
   text_font(NULL), cached_page(NULL), system_menu_title(NULL),
@@ -732,11 +690,6 @@ ONScripterLabel::ONScripterLabel()
     loop_bgm_name[0] = loop_bgm_name[1] = NULL;
     for ( i=0 ; i<ONS_MIX_CHANNELS ; i++ )
         channelvolumes[i] = DEFAULT_VOLUME;
-#if defined(USE_GLUT)
-#else  
-    for (i=0 ; i<ONS_MIX_CHANNELS+ONS_MIX_EXTRA_CHANNELS ; i++)
-        wave_sample[i] = NULL;
-#endif
 
     fileversion = SAVEFILE_VERSION_MAJOR*100 + SAVEFILE_VERSION_MINOR;
 
@@ -1260,11 +1213,6 @@ void ONScripterLabel::reset()
     setStr(&getret_str, NULL);
     getret_int = 0;
 
-#if defined(USE_GLUT)
-#else  
-    if (async_movie) stopMovie(async_movie);
-    async_movie = NULL;
-#endif
     if (movie_buffer) delete[] movie_buffer;
     movie_buffer = NULL;
     if (surround_rects) delete[] surround_rects;
@@ -2306,10 +2254,6 @@ void ONScripterLabel::loadEnvData()
         if (readInt() == 0) kidokumode_flag = false;
         if (readInt() == 1) {
             bgmdownmode_flag = true;
-#if defined(USE_GLUT)
-#else  
-            music_struct.voice_sample = &wave_sample[0];
-#endif
         }
         readStr( &savedir );
         if (savedir)
@@ -2367,26 +2311,10 @@ void ONScripterLabel::quit()
 {
     saveAll();
 
-#if defined(USE_GLUT)
-#else  
-    if (async_movie) stopMovie(async_movie);
-    async_movie = NULL;
-#endif
     if ( cdrom_info ){
         SDL_CDStop( cdrom_info );
         SDL_CDClose( cdrom_info );
     }
-#if defined(USE_GLUT)
-#else
-    if ( seqmusic_info ){
-        Mix_HaltMusic();
-        Mix_FreeMusic( seqmusic_info );
-    }
-    if ( music_info ){
-        Mix_HaltMusic();
-        Mix_FreeMusic( music_info );
-    }
-#endif
 }
 
 void ONScripterLabel::disableGetButtonFlag()
