@@ -326,11 +326,6 @@ SOURCE="..\..\..\extlib\src\SDL-1.2.13\src\loadso\win32\SDL_sysloadso.c"
 SOURCE="..\..\..\extlib\src\SDL-1.2.13\src\main\win32\SDL_win32_main.c"
 # PROP Exclude_From_Build 1
 # End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL-1.2.13\src\main\win32\version.rc"
-# PROP Exclude_From_Build 1
-# End Source File
 # End Group
 # End Group
 # Begin Group "stdlib"

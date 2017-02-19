@@ -69,7 +69,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\bzip2-1.0.4" /I "..\..\..\extlib\src\freetype-2.3.5\include" /I "..\..\..\extlib\src\jpeg-6b" /I "..\jpeg" /I "..\..\..\extlib\src\libogg-1.1.3\include" /I "..\..\..\extlib\src\libpng-1.2.24" /I "..\..\..\extlib\src\libvorbis-1.2.0\include" /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\..\..\extlib\src\SDL_image-1.2.6" /I "..\..\..\extlib\src\SDL_mixer-1.2.8" /I "..\..\..\extlib\src\SDL_ttf-2.0.8" /I "..\..\..\extlib\src\smpeg" /I "..\..\..\extlib\src\zlib-1.2.3" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "USE_OGG_VORBIS" /D DECLSPEC="" /D "USE_GLUT" /FR /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\bzip2-1.0.4" /I "..\..\..\extlib\src\freetype-2.3.5\include" /I "..\..\..\extlib\src\jpeg-6b" /I "..\jpeg" /I "..\..\..\extlib\src\libogg-1.1.3\include" /I "..\..\..\extlib\src\libpng-1.2.24" /I "..\..\..\extlib\src\libvorbis-1.2.0\include" /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\..\..\extlib\src\SDL_image-1.2.6" /I "..\..\..\extlib\src\SDL_mixer-1.2.8" /I "..\..\..\extlib\src\SDL_ttf-2.0.8" /I "..\..\..\extlib\src\smpeg" /I "..\..\..\extlib\src\zlib-1.2.3" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "USE_OGG_VORBIS" /D DECLSPEC="" /FR /YX /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x804 /d "_DEBUG"
@@ -96,6 +96,11 @@ SOURCE=..\..\..\AnimationInfo.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\AVIWrapper.cpp
+# PROP Exclude_From_Build 1
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\DirectReader.cpp
 # End Source File
 # Begin Source File
@@ -105,6 +110,11 @@ SOURCE=..\..\..\DirPaths.cpp
 # Begin Source File
 
 SOURCE=..\..\..\DirtyRect.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\embed.cpp
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -128,7 +138,22 @@ SOURCE=..\..\..\Layer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\LUAHandler.cpp
+# PROP Exclude_From_Build 1
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\MadWrapper.cpp
+# PROP Exclude_From_Build 1
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\NsaReader.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\nscriptdecode.cpp
+# PROP Exclude_From_Build 1
 # End Source File
 # Begin Source File
 
@@ -204,6 +229,11 @@ SOURCE=..\..\..\ScriptParser_command.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\SDL_win32_main.c
+# PROP Exclude_From_Build 1
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\sjis2utf16.cpp
 # End Source File
 # End Group
@@ -213,6 +243,10 @@ SOURCE=..\..\..\sjis2utf16.cpp
 # Begin Source File
 
 SOURCE=..\..\..\AnimationInfo.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\AVIWrapper.h
 # End Source File
 # Begin Source File
 
@@ -253,6 +287,14 @@ SOURCE=..\..\..\graphics_sse2.h
 # Begin Source File
 
 SOURCE=..\..\..\Layer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\LUAHandler.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\MadWrapper.h
 # End Source File
 # Begin Source File
 
@@ -312,6 +354,10 @@ SOURCE=.\SDL_win32_main.cpp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\0.txt
+# End Source File
+# Begin Source File
+
 SOURCE=.\default.ttf
 # End Source File
 # Begin Source File
@@ -321,7 +367,23 @@ SOURCE=.\vc6_change.txt
 # End Group
 # Begin Source File
 
+SOURCE=..\..\..\BUGS
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\CHANGES
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\config.guess
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\config.sub
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\configure
 # End Source File
 # Begin Source File
 
@@ -333,7 +395,23 @@ SOURCE=..\..\..\INSTALL
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\install-sh"
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Makefile.extlibs
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Makefile.onscripter
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ons-en.png"
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\onscripter.rc.in
 # End Source File
 # Begin Source File
 

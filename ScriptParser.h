@@ -42,10 +42,7 @@
 #include <math.h>
 #include <time.h>
 
-#if defined(USE_GLUT)
-#else
 #include <SDL_mixer.h>
-#endif
 #include "DirPaths.h"
 #include "ScriptHandler.h"
 #include "NsaReader.h"
@@ -57,14 +54,11 @@
 #include "LUAHandler.h"
 #endif
 
-#if defined(USE_GLUT)
-#else
 #if defined(USE_OGG_VORBIS)
 #if defined(INTEGER_OGG_VORBIS)
 #include <tremor/ivorbisfile.h>
 #else
 #include <vorbis/vorbisfile.h>
-#endif
 #endif
 #endif
 
@@ -92,27 +86,16 @@ struct OVInfo{
     int mult2;
     unsigned char *buf;
     long decoded_length;
-#if defined(USE_GLUT)
-#else
 #if defined(USE_OGG_VORBIS)
     ogg_int64_t length;
     ogg_int64_t pos;
     OggVorbis_File ovf;
-#endif
 #endif
 };
 
 class ScriptParser
 {
 public:
-#if defined(USE_GLUT)
-	struct MusicStruct{
-        int volume;
-        bool is_mute;
-        MusicStruct()
-        : volume(0), is_mute(false) {}
-    };
-#else
     struct MusicStruct{
         OVInfo *ovi;
         int volume;
@@ -121,7 +104,6 @@ public:
         MusicStruct()
         : ovi(NULL), volume(0), is_mute(false), voice_sample(NULL) {}
     };
-#endif
 
     ScriptParser();
     virtual ~ScriptParser();

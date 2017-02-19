@@ -552,12 +552,21 @@ void DirectReader::convertFromSJISToUTF8( char *dst_buf, char *src_buf )
     *dst_buf++ = 0;
 #endif //MACOSX
 #elif defined(WIN32)
+#if 0
+    int wc_size = MultiByteToWideChar(932, 0, src_buf, -1, NULL, 0);
+    wchar_t *u16_tmp = new wchar_t[wc_size];
+    MultiByteToWideChar(932, 0, src_buf, -1, u16_tmp, wc_size);
+    int mb_size = WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, 0, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, mb_size, NULL, NULL);
+    delete[] u16_tmp;
+#else
     int wc_size = MultiByteToWideChar(936/*932*/, 0, src_buf, -1, NULL, 0);
     wchar_t *u16_tmp = new wchar_t[wc_size];
     MultiByteToWideChar(936/*932*/, 0, src_buf, -1, u16_tmp, wc_size);
     int mb_size = WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, 0, NULL, NULL);
     WideCharToMultiByte(CP_UTF8, 0, u16_tmp, wc_size, dst_buf, mb_size, NULL, NULL);
     delete[] u16_tmp;
+#endif
 #endif //RECODING_FILENAMES || UTF8_FILESYSTEM, WIN32
 }
 
