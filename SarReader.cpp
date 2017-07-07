@@ -189,8 +189,6 @@ int SarReader::readArchive( struct ArchiveInfo *ai, int archive_type, int offset
 
             if ( archive_type == ARCHIVE_TYPE_NSA )
                 ai->fi_list[i].compression_type = readChar( ai->file_handle );
-            else if (strstr( ai->fi_list[i].name, ".nbz" ) != NULL || strstr( ai->fi_list[i].name, ".NBZ" ) != NULL  )
-                ai->fi_list[i].compression_type = NBZ_COMPRESSION;
             else
                 ai->fi_list[i].compression_type = NO_COMPRESSION;
             ai->fi_list[i].offset = readLong( ai->file_handle ) + ai->base_offset;
@@ -213,8 +211,7 @@ int SarReader::readArchive( struct ArchiveInfo *ai, int archive_type, int offset
             // (checking every compressed file in this function caused
             //  a massive slowdown at program start when an archive had
             //  many compressed images...)
-            if ( (ai->fi_list[i].compression_type == NBZ_COMPRESSION) ||
-                  (ai->fi_list[i].compression_type == SPB_COMPRESSION) ){
+            if ( (ai->fi_list[i].compression_type == SPB_COMPRESSION) ){
                 ai->fi_list[i].original_length = 0;
             }
         }
@@ -289,24 +286,6 @@ size_t SarReader::addFile( ArchiveInfo *ai, FILE *newfp, int no, size_t offset, 
             fprintf(stderr, "Read error on adding item %d\n", no);
     }
 
-    if ( ai->fi_list[no].compression_type == NBZ_COMPRESSION ){
-        bool is_nbz = false;
-        if ((ai->fi_list[no].length > 3) && (buffer[2] == 'B') && (buffer[3] == 'Z')){
-            is_nbz = true;
-            ai->fi_list[no].original_length =
-                getDecompressedFileLength( ai->fi_list[no].compression_type,
-                                           newfp, 0 );
-        }
-        fseek( ai->file_handle, offset, SEEK_SET );
-        writeLong( ai->file_handle, ai->fi_list[no].original_length );
-        if (!is_nbz){
-            // in case the original is not compressed in NBZ
-            ai->fi_list[no].length = encodeNBZ( ai->file_handle, ai->fi_list[no].length, buffer ) + 4;
-            ai->fi_list[no].offset = offset;
-            return ai->fi_list[no].length;
-        }
-    }
-
     size_t len = ai->fi_list[no].length, c;
     fseek( ai->file_handle, offset, SEEK_SET );
     while( len > 0 ){
@@ -329,16 +308,7 @@ size_t SarReader::putFileSub( ArchiveInfo *ai, FILE *fp, int no, size_t offset, 
 
     fseek( fp, offset, SEEK_SET );
     if ( modified_flag ){
-        if ( ai->fi_list[no].compression_type == NBZ_COMPRESSION ){
-            writeLong( fp, ai->fi_list[no].original_length );
-            fseek( ai->file_handle, ai->fi_list[no].offset+2, SEEK_SET );
-            if ( readChar( ai->file_handle ) != 'B' || readChar( ai->file_handle ) != 'Z' ){ // in case the original is not compressed in NBZ
-                ai->fi_list[no].length = encodeNBZ( fp, length, buffer ) + 4;
-                ai->fi_list[no].offset = offset;
-                return ai->fi_list[no].length;
-            }
-        }
-        else{
+        {
             ai->fi_list[no].compression_type = NO_COMPRESSION;
         }
     }
@@ -447,7 +417,7 @@ size_t SarReader::getFileLength( const char *file_name )
     int type = info->fi_list[j].compression_type;
     if ( type == NO_COMPRESSION )
         type = getRegisteredCompressionType( file_name );
-    if ( type == NBZ_COMPRESSION || type == SPB_COMPRESSION ) {
+    if ( type == SPB_COMPRESSION ) {
         info->fi_list[j].original_length = getDecompressedFileLength( type, info->file_handle, info->fi_list[j].offset );
     }
     
@@ -462,10 +432,7 @@ size_t SarReader::getFileSub( ArchiveInfo *ai, const char *file_name, unsigned c
     int type = ai->fi_list[i].compression_type;
     if ( type == NO_COMPRESSION ) type = getRegisteredCompressionType( file_name );
 
-    if      ( type == NBZ_COMPRESSION ){
-        return decodeNBZ( ai->file_handle, ai->fi_list[i].offset, buf );
-    }
-    else if ( type == LZSS_COMPRESSION ){
+    if ( type == LZSS_COMPRESSION ){
         return decodeLZSS( ai, i, buf );
     }
     else if ( type == SPB_COMPRESSION ){

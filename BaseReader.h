@@ -48,8 +48,7 @@ struct BaseReader
     enum {
         NO_COMPRESSION   = 0,
         SPB_COMPRESSION  = 1,
-        LZSS_COMPRESSION = 2,
-        NBZ_COMPRESSION  = 4
+        LZSS_COMPRESSION = 2
     };
     
     enum {

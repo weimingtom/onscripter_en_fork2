@@ -227,7 +227,7 @@ int ScriptParser::soundpressplginCommand()
     if (*buf == 0) return RET_CONTINUE;
     
     buf++;
-    script_h.cBR->registerCompressionType( buf, BaseReader::NBZ_COMPRESSION );
+    //script_h.cBR->registerCompressionType( buf, BaseReader::NBZ_COMPRESSION );
 
     return RET_CONTINUE;
 }

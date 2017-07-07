@@ -31,7 +31,6 @@
 // via nsamake
 
 #include "DirectReader.h"
-#include <bzlib.h>
 #if !defined(WIN32) && !defined(MACOS9) && !defined(PSP) && !defined(__OS2__)
 #include <dirent.h>
 #endif
@@ -47,6 +46,7 @@ extern int convUTF16ToUTF8( unsigned char dst[4], unsigned short src );
 
 #ifdef WIN32
 //Mion: support for non-ASCII (SJIS) filenames
+#include <windows.h>
 #include <wchar.h>
 #endif
 
@@ -442,7 +442,7 @@ FILE *DirectReader::getFileHandle( const char *file_name, int &compression_type,
     *length = 0;
     if ( ((fp = fopen( capital_name, "rb" )) != NULL) && (len >= 3) ){
         compression_type = getRegisteredCompressionType( capital_name );
-        if ( compression_type == NBZ_COMPRESSION || compression_type == SPB_COMPRESSION ){
+        if ( compression_type == SPB_COMPRESSION ){
             *length = getDecompressedFileLength( compression_type, fp, 0 );
         }
         else{
@@ -472,10 +472,7 @@ size_t DirectReader::getFile( const char *file_name, unsigned char *buffer,
     size_t len, c, total = 0;
     FILE *fp = getFileHandle( file_name, compression_type, &len );
     
-    if ( fp ){
-        if ( compression_type & NBZ_COMPRESSION )
-            return decodeNBZ( fp, 0, buffer );
-        
+    if ( fp ){        
         if ( compression_type & SPB_COMPRESSION )
             return decodeSPB( fp, 0, buffer );
 
@@ -563,66 +560,6 @@ void DirectReader::convertFromSJISToUTF8( char *dst_buf, char *src_buf )
     delete[] u16_tmp;
 #endif //RECODING_FILENAMES || UTF8_FILESYSTEM, WIN32
 }
-
-size_t DirectReader::decodeNBZ( FILE *fp, size_t offset, unsigned char *buf )
-{
-    if (key_table_flag)
-        fprintf(stderr, "may not decode NBZ with key_table enabled.\n");
-    
-    unsigned int original_length, count;
-	BZFILE *bfp;
-	void *unused;
-	int err, len, nunused;
-
-    fseek( fp, offset, SEEK_SET );
-    original_length = count = readLong( fp );
-
-	bfp = BZ2_bzReadOpen( &err, fp, 0, 0, NULL, 0 );
-	if ( bfp == NULL || err != BZ_OK ) return 0;
-
-	while( err == BZ_OK && count > 0 ){
-        if ( count >= READ_LENGTH )
-            len = BZ2_bzRead( &err, bfp, buf, READ_LENGTH );
-        else
-            len = BZ2_bzRead( &err, bfp, buf, count );
-        count -= len;
-		buf += len;
-	}
-
-	BZ2_bzReadGetUnused(&err, bfp, &unused, &nunused );
-	BZ2_bzReadClose( &err, bfp );
-
-    return original_length - count;
-}
-
-#ifdef TOOLS_BUILD
-
-size_t DirectReader::encodeNBZ( FILE *fp, size_t length, unsigned char *buf )
-{
-    unsigned int bytes_in, bytes_out;
-	int err;
-
-	BZFILE *bfp = BZ2_bzWriteOpen( &err, fp, 9, 0, 30 );
-	if ( bfp == NULL || err != BZ_OK ) return 0;
-
-	while( err == BZ_OK && length > 0 ){
-        if ( length >= WRITE_LENGTH ){
-            BZ2_bzWrite( &err, bfp, buf, WRITE_LENGTH );
-            buf += WRITE_LENGTH;
-            length -= WRITE_LENGTH;
-        }
-        else{
-            BZ2_bzWrite( &err, bfp, buf, length );
-            break;
-        }
-	}
-
-	BZ2_bzWriteClose( &err, bfp, 0, &bytes_in, &bytes_out );
-    
-    return bytes_out;
-}
-
-#endif //TOOLS_BUILD
 
 int DirectReader::getbit( FILE *fp, int n )
 {
@@ -777,10 +714,7 @@ size_t DirectReader::getDecompressedFileLength( int type, FILE *fp, size_t offse
     size_t length=0;
     fseek( fp, offset, SEEK_SET );
     
-    if ( type == NBZ_COMPRESSION ){
-        length = readLong( fp );
-    }
-    else if ( type == SPB_COMPRESSION ){
+    if ( type == SPB_COMPRESSION ){
         size_t width  = readShort( fp );
         size_t height = readShort( fp );
         size_t width_pad  = (4 - width * 3 % 4) % 4;

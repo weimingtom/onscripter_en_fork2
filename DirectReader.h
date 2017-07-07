@@ -105,10 +105,6 @@ protected:
     void writeLong( FILE *fp, unsigned long ch );
     static unsigned short swapShort( unsigned short ch );
     static unsigned long swapLong( unsigned long ch );
-    size_t decodeNBZ( FILE *fp, size_t offset, unsigned char *buf );
-#ifdef TOOLS_BUILD
-    size_t encodeNBZ( FILE *fp, size_t length, unsigned char *buf );
-#endif
     int getbit( FILE *fp, int n );
     size_t decodeSPB( FILE *fp, size_t offset, unsigned char *buf );
     size_t decodeLZSS( struct ArchiveInfo *ai, int no, unsigned char *buf );
