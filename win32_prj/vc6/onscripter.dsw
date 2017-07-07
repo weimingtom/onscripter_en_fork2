@@ -63,30 +63,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "jpeg"=.\jpeg\jpeg.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "libpng"=.\libpng\libpng.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "onscripter"=.\onscripter\onscripter.dsp - Package Owner=<4>
 
 Package=<5>
@@ -97,15 +73,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name bzip2
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name zlib
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name libpng
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name jpeg
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name freetype
@@ -119,18 +86,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name SDL_ttf
     End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "zlib"=.\zlib\zlib.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
 }}}
 
 ###############################################################################

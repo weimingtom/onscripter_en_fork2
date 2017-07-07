@@ -77,7 +77,7 @@ setcursor 1,":l/4,160,0;cursor0.bmp",0,2
 erasetextwindow 1
 
 
-;bg "omake\p_13.jpg",3
+;bg "omake\p_13.bmp",3
 
 bg black,5
 
@@ -98,7 +98,7 @@ setwindow 80,378,35,20,22,22,0,5,25,1,1,":a;waku3.bmp",55,365
 雨后初霁@
 有一股令人怀念的石灰气味\
 
-bg "bs.jpg",5
+bg "bs.bmp",5
 
 ;play "*17"
 waveloop "shiro.wav"
@@ -110,11 +110,11 @@ bg white,3
 
 「哇啊，好冷呢」\
 
-bg "m2.jpg",5
+bg "m2.bmp",5
 
 「看啊，停了哟」\
 
-bg "bs.jpg",5
+bg "bs.bmp",5
 
 然后，白色的呼吸扩展开来，
 淡淡地溶入天空。\
@@ -124,9 +124,9 @@ bg "bs.jpg",5
 ……并且，是从那天起就没有改变的笑容的颜色…\
 
 bg white,5
-bg "t1.jpg",5
-bg "t2.jpg",5
-bg "t2h.jpg",5
+bg "t1.bmp",5
+bg "t2.bmp",5
+bg "t2h.bmp",5
 
 click
 
@@ -146,7 +146,7 @@ bg black,3
 没有见到过的小女孩，就在我眼前。\
 
 bg white,3
-bg "k2.jpg",5
+bg "k2.bmp",5
 　　（哇啊啊）\
 
 『喂，不好好相处吗？』\
@@ -169,7 +169,7 @@ bg white,5
 
 「哇啊啊」\
 
-bg "k2.jpg",5
+bg "k2.bmp",5
 而且，她马上就哭了。\
 
 bg white,3
@@ -191,7 +191,7 @@ bg white,5
 
 　　　（呜哇哇）\
 
-bg "k2.jpg",3
+bg "k2.bmp",3
 「（抽泣），妈妈…」\
 
 ;＿＿＿＿＿＿＿＿＿＿\
@@ -205,7 +205,7 @@ bg white,3
 我光是在边上看着　
 她歪歪扭扭地握着铅笔开始写。\
 
-bg "k3.jpg",5
+bg "k3.bmp",5
 
 …一定这家伙非常高兴吧。
 就像那样，写着给妈妈的信。\
@@ -217,7 +217,7 @@ bg black,3
 然后那家伙好像每日都会
 去检查着家里的邮箱。\
 
-bg "k1.jpg",5
+bg "k1.bmp",5
 高高兴兴地跑向门口
 然后寂寞地回来。\
 
@@ -226,7 +226,7 @@ bg black,3
 「？」\
 『长大的话就会明白了』\
 
-bg "k1.jpg",5
+bg "k1.bmp",5
 
 因为是…，想让我开心吧。\
 
@@ -242,7 +242,7 @@ bg black,3
 我一直在门口等着。\
 
 bg white,5
-bg "k4.jpg",5
+bg "k4.bmp",5
 
 ;＿＿↓ボツ＿＿＿＿＿＿＿＿\
 
@@ -256,48 +256,48 @@ bg white,5
 
 （谢谢，哥）()\
 
-bg "k5.jpg",5
+bg "k5.bmp",5
 …那是第一次…@被她那样叫。\
 
 bg white,3
 ;＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\
 
-bg "bs.jpg",5
+bg "bs.bmp",5
 
 「…怎么了？」\
 
-bg "m1.jpg",5
+bg "m1.bmp",5
 erasetextwindow 0
 
 「不抓紧的话要迟到了哦？」\
 「哎呀，是啊！」\
 
-bg "m3.jpg",3
+bg "m3.bmp",3
 
 「什么事，哥？」\
 
-bg "m4.jpg",3
+bg "m4.bmp",3
 erasetextwindow 1
 「呃，呃！？」\
 
 bg white,5
-bg "bs.jpg",5
+bg "bs.bmp",5
 
 如果抬头仰视的话，那是冬日的天空。\
 纯白的呼吸溶入天空的蔚蓝中去。\
 
-bg "k6.jpg",5
+bg "k6.bmp",5
 与那天一样
 浅浅的颜色正在没有至尽地扩大着…\
 
 bg white,5
-bg "end1.jpg",5
-bg "end1h.jpg",5
+bg "end1.bmp",5
+bg "end1h.bmp",5
 
 click
 
-bg "end2.jpg",5
-bg "end2h.jpg",5
+bg "end2.bmp",5
+bg "end2h.bmp",5
 
 click
 click
