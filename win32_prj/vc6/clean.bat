@@ -1,5 +1,5 @@
-rmdir /S /Q bzip2\Debug bzip2\Release 
-del /Q bzip2\*.plg bzip2\*.ncb bzip2\*.opt bzip2\*.aps
+::rmdir /S /Q bzip2\Debug bzip2\Release 
+::del /Q bzip2\*.plg bzip2\*.ncb bzip2\*.opt bzip2\*.aps
 
 rmdir /S /Q freetype\Debug freetype\Release 
 del /Q freetype\*.plg freetype\*.ncb freetype\*.opt freetype\*.aps
