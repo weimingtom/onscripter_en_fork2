@@ -10,3 +10,4 @@ Workspace for onscripter_en_fork
 * v1: music off, USE_GLUT exists, SDL_mix removed.  
 * v2: music off, USE_GLUT removed.  
 * v3: jpg, png, zlib, bzip2 removed.  
+* v4: freetype removed.  
