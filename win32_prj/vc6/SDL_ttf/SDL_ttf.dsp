@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /W3 /GX /O2 /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /I "..\..\..\extlib\src\freetype-2.3.5\include" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D DECLSPEC="" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D DECLSPEC="" /YX /FD /c
 # ADD BASE RSC /l 0x804 /d "NDEBUG"
 # ADD RSC /l 0x804 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /I "..\..\..\extlib\src\freetype-2.3.5\include" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D DECLSPEC="" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D DECLSPEC="" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x804 /d "_DEBUG"
 # ADD RSC /l 0x804 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -85,17 +85,7 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\glfont.c"
-# PROP Exclude_From_Build 1
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\SDL_ttf.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\showfont.c"
-# PROP Exclude_From_Build 1
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -106,77 +96,5 @@ SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\showfont.c"
 SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\SDL_ttf.h"
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\acinclude.m4"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\aclocal.m4"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\autogen.sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\CHANGES"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\config.guess"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\config.sub"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\configure"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\configure.in"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\COPYING"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\depcomp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\gcc-fat.sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\install-sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\ltmain.sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\Makefile.am"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\Makefile.in"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\missing"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\README"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\SDL_ttf.spec.in"
-# End Source File
 # End Target
 # End Project

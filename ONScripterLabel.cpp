@@ -404,7 +404,7 @@ void ONScripterLabel::initSDL()
     if (!icon || use_app_icons) {
 #ifdef WIN32
         //use the (first) Windows icon resource
-        HICON wicon = LoadIcon(GetModuleHandle(NULL), MAKEINTRESOURCE(ONSCRICON));
+        HICON wicon = LoadIcon(GetModuleHandle(NULL), "ONSCRICON"); //MAKEINTRESOURCE(ONSCRICON)
         if (wicon) {
             SDL_SysWMinfo info;
             SDL_VERSION(&info.version);

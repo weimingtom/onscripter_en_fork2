@@ -1,0 +1,3 @@
+<= v3
+* HICON wicon = LoadIcon(GetModuleHandle(NULL), "ONSCRICON"); //MAKEINTRESOURCE(ONSCRICON)
+* useless dsw include path removed
