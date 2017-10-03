@@ -2,6 +2,8 @@
 Workspace for onscripter_en_fork
 
 ## Ref  
+* http://onscripter.unclemion.com/onscripter/  
+* http://onscripter.osdn.jp/onscripter.html  
 * https://github.com/weimingtom/onscripter_en_fork  
 * https://github.com/weimingtom/sdlport  
 
