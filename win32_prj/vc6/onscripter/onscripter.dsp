@@ -190,10 +190,6 @@ SOURCE=..\..\..\ScriptParser.cpp
 
 SOURCE=..\..\..\ScriptParser_command.cpp
 # End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_ttf-2.0.8\SDL_ttf.c"
-# End Source File
 # End Group
 # Begin Group "Header Files"
 

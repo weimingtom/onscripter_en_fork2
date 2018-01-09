@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MT /w /W0 /GX /O2 /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D "LOAD_BMP" /D "LOAD_GIF" /D "LOAD_JPG" /D "LOAD_LBM" /D "LOAD_PCX" /D "LOAD_PNG" /D "LOAD_PNM" /D "LOAD_TGA" /D "LOAD_XPM" /D "LOAD_XV" /D DECLSPEC="" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D DECLSPEC="" /YX /FD /c
 # ADD BASE RSC /l 0x804 /d "NDEBUG"
 # ADD RSC /l 0x804 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
-# ADD CPP /nologo /MTd /w /W0 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D "BUILD_SDL" /D "LOAD_BMP" /D "LOAD_GIF" /D "LOAD_LBM" /D "LOAD_PCX" /D "LOAD_PNM" /D "LOAD_TGA" /D "LOAD_XPM" /D "LOAD_XV" /D DECLSPEC="" /YX /FD /GZ /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "..\..\..\extlib\src\SDL-1.2.13\include" /I "..\SDL" /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /D _WIN32_WINNT=0x0400 /D DECLSPEC="" /YX /FD /GZ /c
 # ADD BASE RSC /l 0x804 /d "_DEBUG"
 # ADD RSC /l 0x804 /d "_DEBUG"
 BSC32=bscmake.exe
@@ -85,59 +85,14 @@ LIB32=link.exe -lib
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG.c"
-# End Source File
-# Begin Source File
+SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\SDL_image.c"
 
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_bmp.c"
-# End Source File
-# Begin Source File
+!IF  "$(CFG)" == "SDL_image - Win32 Release"
 
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_gif.c"
-# End Source File
-# Begin Source File
+!ELSEIF  "$(CFG)" == "SDL_image - Win32 Debug"
 
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_jpg.c"
-# End Source File
-# Begin Source File
+!ENDIF 
 
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_lbm.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_pcx.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_png.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_pnm.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_tga.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_tif.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_xcf.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_xpm.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_xv.c"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_xxx.c"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -148,57 +103,5 @@ SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\IMG_xxx.c"
 SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\SDL_image.h"
 # End Source File
 # End Group
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\CHANGES"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\config.guess"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\config.sub"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\configure"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\COPYING"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\depcomp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\install-sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\ltmain.sh"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\Makefile.in"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\missing"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\README"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\SDL_image.qpg.in"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\extlib\src\SDL_image-1.2.6\SDL_image.spec.in"
-# End Source File
 # End Target
 # End Project

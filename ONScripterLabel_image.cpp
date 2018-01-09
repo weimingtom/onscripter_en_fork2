@@ -291,11 +291,13 @@ SDL_Surface *ONScripterLabel::createSurfaceFromFile(char *filename, int *locatio
 
     SDL_RWops *src = SDL_RWFromMem(buffer, length);
     SDL_Surface *tmp = IMG_Load_RW(src, 0);
+#if 0
     if (!tmp && ext && (!strcmp(ext+1, "JPG") || !strcmp(ext+1, "jpg"))){
         fprintf(stderr, " *** force-loading a JPG image [%s]\n", filename);
         tmp = IMG_LoadJPG_RW(src);
 
     }
+#endif
     SDL_RWclose(src);
 
     if (buffer != tmp_image_buf) delete[] buffer;

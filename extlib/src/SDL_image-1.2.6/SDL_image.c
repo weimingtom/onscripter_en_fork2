@@ -1,35 +1,63 @@
-/*
-    SDL_image:  An example image loading library for use with SDL
-    Copyright (C) 1997-2006 Sam Lantinga
-
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-    Sam Lantinga
-    slouken@libsdl.org
-*/
-
-/* This is a BMP image file loading framework */
-
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "SDL_image.h"
 
-#ifdef LOAD_BMP
+SDL_Surface *IMG_Load(const char *file)
+{
+    SDL_RWops *src = SDL_RWFromFile(file, "rb");
+    char *ext = strrchr(file, '.');
+    if(ext) {
+        ext++;
+    }
+    if(!src) {
+        return NULL;
+    }
+    return IMG_LoadTyped_RW(src, 1, ext);
+}
 
-/* See if an image is contained in a data source */
+SDL_Surface *IMG_Load_RW(SDL_RWops *src, int freesrc)
+{
+    return IMG_LoadTyped_RW(src, freesrc, NULL);
+}
+
+SDL_Surface *IMG_LoadTyped_RW(SDL_RWops *src, int freesrc, char *type)
+{
+	SDL_Surface *image;
+
+	if ( src == NULL ) {
+		IMG_SetError("Passed a NULL data source");
+		return(NULL);
+	}
+
+	if ( SDL_RWseek(src, 0, SEEK_CUR) < 0 ) {
+		IMG_SetError("Can't seek in this data source");
+		if(freesrc)
+			SDL_RWclose(src);
+		return(NULL);
+	}
+
+	/* Detect the type of image being loaded */
+	image = NULL;
+	if (IMG_isBMP(src)) {	
+#ifdef DEBUG_IMGLIB
+		fprintf(stderr, "IMGLIB: Loading image as %s\n",
+			"BMP");
+#endif
+		image = IMG_LoadBMP_RW(src);
+		if (freesrc)
+			SDL_RWclose(src);
+		return image;
+	} else {
+		if ( freesrc ) {
+			SDL_RWclose(src);
+		}
+		IMG_SetError("Unsupported image format");
+		return NULL;
+	}
+}
+
 int IMG_isBMP(SDL_RWops *src)
 {
 	int start;
@@ -49,11 +77,6 @@ int IMG_isBMP(SDL_RWops *src)
 	return(is_BMP);
 }
 
-#include "SDL_error.h"
-#include "SDL_video.h"
-#include "SDL_endian.h"
-
-/* Compression encodings for BMP files */
 #ifndef BI_RGB
 #define BI_RGB		0
 #define BI_RLE8		1
@@ -448,18 +471,3 @@ SDL_Surface *IMG_LoadBMP_RW(SDL_RWops *src)
 	return(LoadBMP_RW(src, 0));
 }
 
-#else
-
-/* See if an image is contained in a data source */
-int IMG_isBMP(SDL_RWops *src)
-{
-	return(0);
-}
-
-/* Load a BMP type image from an SDL datasource */
-SDL_Surface *IMG_LoadBMP_RW(SDL_RWops *src)
-{
-	return(NULL);
-}
-
-#endif /* LOAD_BMP */

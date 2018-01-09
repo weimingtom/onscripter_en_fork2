@@ -591,6 +591,7 @@ static SDL_Surface *loadImage( char *file_name, bool *has_alpha, SDL_Surface *su
     br->getFile( file_name, buffer, &location );
     SDL_Surface *tmp = IMG_Load_RW(SDL_RWFromMem( buffer, length ), 1);
 
+#if 0
     char *ext = strrchr(file_name, '.');
     if ( !tmp && ext && (!strcmp( ext+1, "JPG" ) || !strcmp( ext+1, "jpg" ) ) ){
         fprintf( stderr, " *** force-loading a JPG image [%s]\n", file_name );
@@ -598,6 +599,7 @@ static SDL_Surface *loadImage( char *file_name, bool *has_alpha, SDL_Surface *su
         tmp = IMG_LoadJPG_RW(src);
         SDL_RWclose(src);
     }
+#endif
     if ( tmp && has_alpha ) *has_alpha = tmp->format->Amask;
 
     delete[] buffer;
