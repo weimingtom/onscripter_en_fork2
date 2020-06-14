@@ -910,7 +910,7 @@ private:
     char *default_cdrom_drive;
     bool cdaudio_on_flag; // false if mute
     bool volume_on_flag; // false if mute
-    SDL_AudioSpec audio_format;
+    //SDL_AudioSpec audio_format;
     bool audio_open_flag;
 
     bool wave_play_loop_flag;
@@ -919,7 +919,6 @@ private:
     bool seqmusic_play_loop_flag;
     char *seqmusic_file_name;
 
-    SDL_CD *cdrom_info;
     int current_cd_track;
     bool cd_play_loop_flag;
     bool music_play_loop_flag;

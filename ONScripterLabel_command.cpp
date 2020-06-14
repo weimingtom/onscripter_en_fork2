@@ -80,7 +80,7 @@
 #define CONTINUOUS_PLAY
 
 extern SDL_TimerID timer_bgmfade_id;
-extern "C" Uint32 SDLCALL bgmfadeCallback( Uint32 interval, void *param );
+extern "C" Uint32 bgmfadeCallback( Uint32 interval, void *param );
 
 int ONScripterLabel::yesnoboxCommand()
 {
@@ -570,7 +570,7 @@ int ONScripterLabel::sp_rgb_gradationCommand()
     SDL_Surface *surface = si->image_surface;
     if (surface == NULL) return RET_CONTINUE;
 
-    SDL_PixelFormat *fmt = surface->format;
+    SDL_PixelFormat *fmt = SDL_Surface_get_format(surface);
 
     ONSBuf key_mask = (key_r >> fmt->Rloss) << fmt->Rshift |
         (key_g >> fmt->Gloss) << fmt->Gshift |
@@ -582,9 +582,9 @@ int ONScripterLabel::sp_rgb_gradationCommand()
     int i, j;
     int upper_bound=0, lower_bound=0;
     bool is_key_found = false;
-    for (i=0 ; i<surface->h ; i++){
-        ONSBuf *buf = (ONSBuf *)surface->pixels + surface->w * i;
-        for (j=0 ; j<surface->w ; j++, buf++){
+    for (i=0 ; i<SDL_Surface_get_h(surface) ; i++){
+        ONSBuf *buf = (ONSBuf *)SDL_Surface_get_pixels(surface) + SDL_Surface_get_w(surface) * i;
+        for (j=0 ; j < SDL_Surface_get_w(surface) ; j++, buf++){
             if ((*buf & rgb_mask) == key_mask){
                 if (is_key_found == false){
                     is_key_found = true;
@@ -600,9 +600,9 @@ int ONScripterLabel::sp_rgb_gradationCommand()
 
     // replace pixels of the key-color with the specified color in gradation
     for (i=upper_bound ; i<=lower_bound ; i++){
-        ONSBuf *buf = (ONSBuf *)surface->pixels + surface->w * i;
+        ONSBuf *buf = (ONSBuf *)SDL_Surface_get_pixels(surface) + SDL_Surface_get_w(surface) * i;
 #ifdef BPP16
-        unsigned char *alphap = si->alpha_buf + surface->w * i;
+        unsigned char *alphap = si->alpha_buf + SDL_Surface_get_w(surface) * i;
 #else
 #if SDL_BYTEORDER == SDL_LIL_ENDIAN
         unsigned char *alphap = (unsigned char *)buf + 3;
@@ -610,7 +610,7 @@ int ONScripterLabel::sp_rgb_gradationCommand()
         unsigned char *alphap = (unsigned char *)buf;
 #endif
 #endif
-        Uint32 color = alpha << surface->format->Ashift;
+        Uint32 color = alpha << SDL_Surface_get_format(surface)->Ashift;
         if (upper_bound != lower_bound){
             color |= (((lower_r - upper_r) * (i-upper_bound) / (lower_bound - upper_bound) + upper_r) >> fmt->Rloss) << fmt->Rshift;
             color |= (((lower_g - upper_g) * (i-upper_bound) / (lower_bound - upper_bound) + upper_g) >> fmt->Gloss) << fmt->Gshift;
@@ -622,7 +622,7 @@ int ONScripterLabel::sp_rgb_gradationCommand()
             color |= (upper_b >> fmt->Bloss) << fmt->Bshift;
         }
 
-        for (j=0 ; j<surface->w ; j++, buf++){
+        for (j=0 ; j < SDL_Surface_get_w(surface) ; j++, buf++){
             if ((*buf & rgb_mask) == key_mask){
                 *buf = color;
                 *alphap = alpha;
@@ -1780,7 +1780,7 @@ int ONScripterLabel::movemousecursorCommand()
     int x = StretchPosX(script_h.readInt());
     int y = StretchPosY(script_h.readInt());
 
-    SDL_WarpMouse( x, y );
+    //SDL_WarpMouse( x, y );
 
     return RET_CONTINUE;
 }
@@ -1788,10 +1788,11 @@ int ONScripterLabel::movemousecursorCommand()
 int ONScripterLabel::mousemodeCommand()
 {
     int no = script_h.readInt();
-    if (no == 0)
-        SDL_ShowCursor(SDL_DISABLE);
-    else
-        SDL_ShowCursor(SDL_ENABLE);
+    if (no == 0) {
+        ; //SDL_ShowCursor(SDL_DISABLE);
+    } else {
+        ; //SDL_ShowCursor(SDL_ENABLE);
+	}
 
     return RET_CONTINUE;
 }
@@ -1822,10 +1823,6 @@ int ONScripterLabel::monocroCommand()
 
 int ONScripterLabel::minimizewindowCommand()
 {
-#ifndef PSP
-    SDL_WM_IconifyWindow();
-#endif
-
     return RET_CONTINUE;
 }
 
@@ -2706,8 +2703,8 @@ int ONScripterLabel::getscreenshotCommand()
     if ( h == 0 ) h = 1;
 
     if ( screenshot_surface &&
-         (screenshot_surface->w != w ||
-         screenshot_surface->h != h )){
+        (SDL_Surface_get_w(screenshot_surface) != w ||
+         SDL_Surface_get_h(screenshot_surface) != h )){
         SDL_FreeSurface( screenshot_surface );
         screenshot_surface = NULL;
     }
@@ -2715,7 +2712,7 @@ int ONScripterLabel::getscreenshotCommand()
     if ( screenshot_surface == NULL )
         screenshot_surface = SDL_CreateRGBSurface( SDL_SWSURFACE, w, h, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
 
-    SDL_Surface *surface = SDL_ConvertSurface( screen_surface, image_surface->format, SDL_SWSURFACE );
+    SDL_Surface *surface = SDL_ConvertSurface( screen_surface, SDL_Surface_get_format(image_surface), SDL_SWSURFACE );
     AnimationInfo::resizeSurface( surface, screenshot_surface );
     SDL_FreeSurface( surface );
 
@@ -3354,7 +3351,7 @@ int ONScripterLabel::dvCommand()
 
 int ONScripterLabel::drawtextCommand()
 {
-    SDL_Rect clip = {0, 0, accumulation_surface->w, accumulation_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(accumulation_surface), SDL_Surface_get_h(accumulation_surface)};
     text_info.blendOnSurface( accumulation_surface, 0, 0, clip );
 
     return RET_CONTINUE;
@@ -3386,7 +3383,7 @@ int ONScripterLabel::drawsp3Command()
         si.inv_mat[1][1] =  si.mat[0][0] * 1000 / denom;
     }
 
-    SDL_Rect clip = {0, 0, screen_surface->w, screen_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(screen_surface), SDL_Surface_get_h(screen_surface)};
     si.blendOnSurface2( accumulation_surface, x, y, clip, alpha );
     si.setCell(old_cell_no);
 
@@ -3409,7 +3406,7 @@ int ONScripterLabel::drawsp2Command()
     si.calcAffineMatrix();
     si.setCell(cell_no);
 
-    SDL_Rect clip = {0, 0, screen_surface->w, screen_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(screen_surface), SDL_Surface_get_h(screen_surface)};
     si.blendOnSurface2( accumulation_surface, si.pos.x, si.pos.y, clip, alpha );
 
     return RET_CONTINUE;
@@ -3426,7 +3423,7 @@ int ONScripterLabel::drawspCommand()
     AnimationInfo &si = sprite_info[sprite_no];
     int old_cell_no = si.current_cell;
     si.setCell(cell_no);
-    SDL_Rect clip = {0, 0, accumulation_surface->w, accumulation_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(accumulation_surface), SDL_Surface_get_h(accumulation_surface)};
     si.blendOnSurface( accumulation_surface, x, y, clip, alpha );
     si.setCell(old_cell_no);
 
@@ -3439,21 +3436,21 @@ int ONScripterLabel::drawfillCommand()
     int g = script_h.readInt();
     int b = script_h.readInt();
 
-    SDL_FillRect( accumulation_surface, NULL, SDL_MapRGBA( accumulation_surface->format, r, g, b, 0xff) );
+    SDL_FillRect( accumulation_surface, NULL, SDL_MapRGBA( SDL_Surface_get_format(accumulation_surface), r, g, b, 0xff) );
 
     return RET_CONTINUE;
 }
 
 int ONScripterLabel::drawclearCommand()
 {
-    SDL_FillRect( accumulation_surface, NULL, SDL_MapRGBA( accumulation_surface->format, 0, 0, 0, 0xff) );
+    SDL_FillRect( accumulation_surface, NULL, SDL_MapRGBA( SDL_Surface_get_format(accumulation_surface), 0, 0, 0, 0xff) );
 
     return RET_CONTINUE;
 }
 
 int ONScripterLabel::drawbgCommand()
 {
-    SDL_Rect clip = {0, 0, accumulation_surface->w, accumulation_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(accumulation_surface), SDL_Surface_get_h(accumulation_surface)};
     bg_info.blendOnSurface( accumulation_surface, bg_info.pos.x, bg_info.pos.y, clip );
 
     return RET_CONTINUE;
@@ -3470,7 +3467,7 @@ int ONScripterLabel::drawbg2Command()
     bi.rot = script_h.readInt();
     bi.calcAffineMatrix();
 
-    SDL_Rect clip = {0, 0, screen_surface->w, screen_surface->h};
+    SDL_Rect clip = {0, 0, SDL_Surface_get_w(screen_surface), SDL_Surface_get_h(screen_surface)};
     bi.blendOnSurface2( accumulation_surface, bi.pos.x, bi.pos.y,
                         clip, 256 );
 
@@ -3827,6 +3824,10 @@ int ONScripterLabel::captionCommand()
     setStr( &wm_icon_string,  buf2 );
     delete[] buf2;
     //printf("caption (utf8): '%s'\n", wm_title_string);
+#if 1
+	//FIXME:???
+	setStr( &wm_title_string, buf );
+#endif
     SDL_WM_SetCaption( wm_title_string, wm_icon_string );
 #ifdef WIN32
     //convert from UTF-8 to Wide (Unicode) and thence to system ANSI
@@ -3840,7 +3841,6 @@ int ONScripterLabel::captionCommand()
 
     //set the window caption directly
     SDL_SysWMinfo info;
-    SDL_VERSION(&info.version);
     SDL_GetWMInfo(&info);
     SendMessageA(info.window, WM_SETTEXT, 0, (LPARAM)cvt);
     delete[] cvt;
@@ -4085,12 +4085,12 @@ int ONScripterLabel::btnCommand()
         button->image_rect.h = 0;
     }
     if (btndef_info.image_surface &&
-        src_rect.x + button->image_rect.w > btndef_info.image_surface->w){
-        button->image_rect.w = btndef_info.image_surface->w - src_rect.x;
+        src_rect.x + button->image_rect.w > SDL_Surface_get_w(btndef_info.image_surface)){
+        button->image_rect.w = SDL_Surface_get_w(btndef_info.image_surface) - src_rect.x;
     }
     if (btndef_info.image_surface &&
-        src_rect.y + button->image_rect.h > btndef_info.image_surface->h){
-        button->image_rect.h = btndef_info.image_surface->h - src_rect.y;
+        src_rect.y + button->image_rect.h > SDL_Surface_get_h(btndef_info.image_surface)){
+        button->image_rect.h = SDL_Surface_get_h(btndef_info.image_surface) - src_rect.y;
     }
     src_rect.w = button->image_rect.w;
     src_rect.h = button->image_rect.h;
@@ -4147,14 +4147,14 @@ int ONScripterLabel::bltCommand()
     else{
         SDL_LockSurface(accumulation_surface);
         SDL_LockSurface(btndef_info.image_surface);
-        ONSBuf *dst_buf = (ONSBuf*)accumulation_surface->pixels;
-        ONSBuf *src_buf = (ONSBuf*)btndef_info.image_surface->pixels;
+        ONSBuf *dst_buf = (ONSBuf*)SDL_Surface_get_pixels(accumulation_surface);
+        ONSBuf *src_buf = (ONSBuf*)SDL_Surface_get_pixels(btndef_info.image_surface);
 #ifdef BPP16
-        int dst_width = accumulation_surface->pitch / 2;
-        int src_width = btndef_info.image_surface->pitch / 2;
+        int dst_width = SDL_Surface_get_pitch(accumulation_surface) / 2;
+        int src_width = SDL_Surface_get_pitch(btndef_info.image_surface) / 2;
 #else
-        int dst_width = accumulation_surface->pitch / 4;
-        int src_width = btndef_info.image_surface->pitch / 4;
+        int dst_width = SDL_Surface_get_pitch(accumulation_surface) / 4;
+        int src_width = SDL_Surface_get_pitch(btndef_info.image_surface) / 4;
 #endif
 
         int start_y = dy, end_y = dy+dh;
@@ -4179,8 +4179,8 @@ int ONScripterLabel::bltCommand()
             for (int j=start_x ; j<end_x ; j++){
 
                 int x = sx+sw*(j-dx)/dw;
-                if (x<0 || x>=btndef_info.image_surface->w ||
-                    y<0 || y>=btndef_info.image_surface->h)
+                if (x<0 || x>= SDL_Surface_get_w(btndef_info.image_surface) ||
+                    y<0 || y>= SDL_Surface_get_h(btndef_info.image_surface))
                     *(dst_buf+j) = 0;
                 else
                     *(dst_buf+j) = *(src_buf+y*src_width+x);
@@ -4254,7 +4254,9 @@ int ONScripterLabel::bgCommand()
 
     EffectLink *el = parseEffect(true);
     if (setEffect(el, true, true)) return RET_CONTINUE;
+#if 1 //TODO:
     while (doEffect(el));
+#endif
 
     return RET_CONTINUE;
 }

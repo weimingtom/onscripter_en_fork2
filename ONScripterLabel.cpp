@@ -376,15 +376,6 @@ void ONScripterLabel::initSDL()
         return; //dummy
     }
 
-#if 0
-    if(SDL_InitSubSystem( SDL_INIT_JOYSTICK ) == 0 && SDL_JoystickOpen(0) != NULL)
-        printf( "Initialize JOYSTICK\n");
-#endif
-
-#if defined(PSP) || defined(IPODLINUX)
-    SDL_ShowCursor(SDL_DISABLE);
-#endif
-
     SDL_EnableUNICODE(1);
 
     /* ---------------------------------------- */
@@ -393,71 +384,6 @@ void ONScripterLabel::initSDL()
         errorAndExit("can't initialize SDL TTF", NULL, "Init Error", true);
         return; //dummy
     }
-
-//insani added app icon
-    SDL_Surface* icon = IMG_Load("icon.png");
-    //use icon.png preferably, but try embedded resources if not found
-    //(cmd-line option --use-app-icons to prefer app resources over icon.png)
-    //(Mac apps can set use-app-icons in a ons.cfg file within the
-    //bundle, to have it always use the bundle icns)
-#ifndef MACOSX
-    if (!icon || use_app_icons) {
-#ifdef WIN32
-        //use the (first) Windows icon resource
-        HICON wicon = LoadIcon(GetModuleHandle(NULL), "ONSCRICON"); //MAKEINTRESOURCE(ONSCRICON)
-        if (wicon) {
-            SDL_SysWMinfo info;
-            SDL_VERSION(&info.version);
-            SDL_GetWMInfo(&info);
-            SendMessage(info.window, WM_SETICON, ICON_BIG, (LPARAM)wicon);
-        }
-#else
-        //backport from ponscripter
-        const InternalResource* internal_icon = getResource("icon.png");
-        if (internal_icon) {
-            if (icon) SDL_FreeSurface(icon);
-            SDL_RWops* rwicon = SDL_RWFromConstMem(internal_icon->buffer,
-                                                   internal_icon->size);
-            icon = IMG_Load_RW(rwicon, 0);
-            use_app_icons = false;
-        }
-#endif //WIN32
-    }
-#endif //!MACOSX
-    // If an icon was found (and desired), use it.
-    if (icon && !use_app_icons) {
-#if defined(MACOSX) || defined(WIN32)
-#if defined(MACOSX)
-        //resize the (usually 32x32) icon to 128x128
-        SDL_Surface *tmp2 = SDL_CreateRGBSurface(SDL_SWSURFACE, 128, 128,
-                                                 32, 0x00ff0000, 0x0000ff00,
-                                                 0x000000ff, 0xff000000);
-#elif defined(WIN32)
-        //resize the icon to 32x32
-        SDL_Surface *tmp2 = SDL_CreateRGBSurface(SDL_SWSURFACE, 32, 32,
-                                                 32, 0x00ff0000, 0x0000ff00,
-                                                 0x000000ff, 0xff000000);
-#endif //MACOSX, WIN32
-        SDL_Surface *tmp = SDL_ConvertSurface( icon, tmp2->format, SDL_SWSURFACE );
-        if ((tmp->w == tmp2->w) && (tmp->h == tmp2->h)) {
-            //already the right size, just use converted surface as-is
-            SDL_FreeSurface(tmp2);
-            tmp2 = icon;
-            icon = tmp;
-            SDL_FreeSurface(tmp2);
-        } else {
-            //resize converted surface
-            AnimationInfo::resizeSurface(tmp, tmp2);
-            SDL_FreeSurface(tmp);
-            tmp = icon;
-            icon = tmp2;
-            SDL_FreeSurface(tmp);
-        }
-#endif //MACOSX || WIN32
-        SDL_WM_SetIcon(icon, NULL);
-    }
-    if (icon)
-        SDL_FreeSurface(icon);
 
 #ifdef BPP16
     screen_bpp = 16;
@@ -559,7 +485,7 @@ void ONScripterLabel::initSDL()
         }
     }
 #endif
-    screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG|(fullscreen_mode?SDL_FULLSCREEN:0) );
+    screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG );
 
     /* ---------------------------------------- */
     /* Check if VGA screen is available. */
@@ -568,7 +494,7 @@ void ONScripterLabel::initSDL()
         screen_ratio1 /= 2;
         screen_width  /= 2;
         screen_height /= 2;
-        screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG|(fullscreen_mode?SDL_FULLSCREEN:0) );
+        screen_surface = SDL_SetVideoMode( screen_width, screen_height, screen_bpp, DEFAULT_VIDEO_SURFACE_FLAG );
     }
 #endif
 
@@ -622,7 +548,6 @@ ONScripterLabel::ONScripterLabel()
   breakup_cells(NULL), breakup_cellforms(NULL), breakup_mask(NULL),
   shelter_select_link(NULL), default_cdrom_drive(NULL),
   wave_file_name(NULL), seqmusic_file_name(NULL), 
-  cdrom_info(NULL),
   music_file_name(NULL), music_buffer(NULL),
   music_cmd(NULL), seqmusic_cmd(NULL),
   movie_buffer(NULL), async_movie_surface(NULL),
@@ -1090,18 +1015,6 @@ int ONScripterLabel::init()
     // ----------------------------------------
     // Sound related variables
     this->cdaudio_flag = cdaudio_flag;
-    if ( cdaudio_flag ){
-        if ( cdrom_drive_number >= 0 && cdrom_drive_number < SDL_CDNumDrives() )
-            cdrom_info = SDL_CDOpen( cdrom_drive_number );
-        if ( !cdrom_info ){
-            fprintf(stderr, "Couldn't open default CD-ROM: %s\n", SDL_GetError());
-        }
-        else if ( cdrom_info && !CD_INDRIVE( SDL_CDStatus( cdrom_info ) ) ) {
-            fprintf( stderr, "no CD-ROM in the drive\n" );
-            SDL_CDClose( cdrom_info );
-            cdrom_info = NULL;
-        }
-    }
 
     // ----------------------------------------
     // Initialize misc variables
@@ -1543,9 +1456,23 @@ void ONScripterLabel::flush( int refresh_mode, SDL_Rect *rect, bool clear_dirty_
 
 void ONScripterLabel::flushDirect( SDL_Rect &rect, int refresh_mode, bool updaterect )
 {
-    //printf("flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
+	char str[256] = {0};
+    sprintf(str, "flush %d: %d %d %d %d\n", refresh_mode, rect.x, rect.y, rect.w, rect.h );
+	OutputDebugString(str);
 
-    if (surround_rects) {
+	//for simple test msdl implement
+	//FIXME:???
+#if defined(_MSC_VER)
+	#define USE_FULL_FLASH_PORT 1
+	if (USE_FULL_FLASH_PORT) { 
+		rect.x = 0;
+		rect.y = 0;
+		rect.w = 640;
+		rect.h = 480;
+	}
+#endif    
+	
+	if (surround_rects) {
         // playing a movie, need to avoid overpainting it
         SDL_Rect tmp_rects[4];
         for (int i=0; i<4; ++i) {
@@ -1558,6 +1485,8 @@ void ONScripterLabel::flushDirect( SDL_Rect &rect, int refresh_mode, bool update
     } else { 
         refreshSurface( accumulation_surface, &rect, refresh_mode );
         SDL_BlitSurface( accumulation_surface, &rect, screen_surface, &rect );
+		//SDL_SaveBMP(
+		SDL_savebmp(accumulation_surface->_surf, "accumulation");
         if (updaterect) SDL_UpdateRect( screen_surface, rect.x, rect.y, rect.w, rect.h );
     }
 }
@@ -1811,6 +1740,11 @@ int ONScripterLabel::parseLine( )
         snprintf(script_h.current_cmd, 64, "%s", s_buf);
         //Check against builtin cmds
         if (cmd[0] >= 'a' && cmd[0] <= 'z'){
+			//TODO:
+			char debugstr[256] = {0};
+			sprintf(debugstr, ">>>>>>>> %s\n", cmd); 
+			OutputDebugString(debugstr);
+
             FuncHash &fh = func_hash[cmd[0]-'a'];
             for (int i=fh.start ; i<=fh.end ; i++){
                 if ( !strcmp( func_lut[i].command, cmd ) ){
@@ -2028,13 +1962,13 @@ void ONScripterLabel::displayTextWindow( SDL_Surface *surface, SDL_Rect &clip )
 
         if ( AnimationInfo::doClipping( &rect, &clip ) ) return;
 
-        if ( rect.x + rect.w > surface->w ) rect.w = surface->w - rect.x;
-        if ( rect.y + rect.h > surface->h ) rect.h = surface->h - rect.y;
+        if ( rect.x + rect.w > SDL_Surface_get_w(surface) ) rect.w = SDL_Surface_get_w(surface) - rect.x;
+        if ( rect.y + rect.h > SDL_Surface_get_h(surface) ) rect.h = SDL_Surface_get_h(surface) - rect.y;
 
         SDL_LockSurface( surface );
-        ONSBuf *buf = (ONSBuf *)surface->pixels + rect.y * surface->w + rect.x;
+        ONSBuf *buf = (ONSBuf *)SDL_Surface_get_pixels(surface) + rect.y * SDL_Surface_get_w(surface) + rect.x;
 
-        SDL_PixelFormat *fmt = surface->format;
+        SDL_PixelFormat *fmt = SDL_Surface_get_format(surface);
         int color[3];
         color[0] = current_font->window_color[0] + 1;
         color[1] = current_font->window_color[1] + 1;
@@ -2046,7 +1980,7 @@ void ONScripterLabel::displayTextWindow( SDL_Surface *surface, SDL_Rect &clip )
                     (((*buf & fmt->Gmask) >> fmt->Gshift) * color[1] >> 8) << fmt->Gshift |
                     (((*buf & fmt->Bmask) >> fmt->Bshift) * color[2] >> 8) << fmt->Bshift;
             }
-            buf += surface->w - rect.w;
+            buf += SDL_Surface_get_w(surface) - rect.w;
         }
 
         SDL_UnlockSurface( surface );
@@ -2310,11 +2244,6 @@ int ONScripterLabel::refreshMode()
 void ONScripterLabel::quit()
 {
     saveAll();
-
-    if ( cdrom_info ){
-        SDL_CDStop( cdrom_info );
-        SDL_CDClose( cdrom_info );
-    }
 }
 
 void ONScripterLabel::disableGetButtonFlag()

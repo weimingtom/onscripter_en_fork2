@@ -44,6 +44,7 @@
 #include <windows.h>
 #define snprintf _snprintf
 #endif
+#include <SDL.h>
 
 extern unsigned short convSJIS2UTF16( unsigned short in );
 
@@ -157,6 +158,7 @@ void ONScripterLabel::drawGlyph( SDL_Surface *dst_surface, Fontinfo *info, SDL_C
     SDL_Surface *tmp_surface = renderGlyph( (TTF_Font*)info->ttf_font, unicode );
 
     if (tmp_surface == NULL) return;
+	SDL_savebmp(tmp_surface->_surf, "tmp_surface");
 
     bool rotate_flag = false;
     if ( (info->getTateyokoMode() == Fontinfo::TATE_MODE) &&
@@ -185,12 +187,12 @@ void ONScripterLabel::drawGlyph( SDL_Surface *dst_surface, Fontinfo *info, SDL_C
     }
 
     if (rotate_flag){
-        dst_rect.w = tmp_surface->h;
-        dst_rect.h = tmp_surface->w;
+        dst_rect.w = SDL_Surface_get_h(tmp_surface);
+        dst_rect.h = SDL_Surface_get_w(tmp_surface);
     }
     else{
-        dst_rect.w = tmp_surface->w;
-        dst_rect.h = tmp_surface->h;
+        dst_rect.w = SDL_Surface_get_w(tmp_surface);
+        dst_rect.h = SDL_Surface_get_h(tmp_surface);
     }
 
     if (cache_info)
@@ -757,6 +759,8 @@ void ONScripterLabel::endRuby(bool flush_flag, bool lookback_flag, SDL_Surface *
     ruby_struct.stage = RubyStruct::NONE;
 }
 
+int _testcount = 0;
+
 int ONScripterLabel::textCommand()
 {
     if (line_enter_status <= 1 && saveon_flag && internal_saveon_flag){
@@ -830,7 +834,24 @@ int ONScripterLabel::textCommand()
 
     if (debug_level > 1)
         printf("textCommand %s %d %d %d\n", script_h.getStringBuffer() + string_buffer_offset, string_buffer_offset, event_mode, line_enter_status);
+
+	char buf2[255] = {0};
+	sprintf(buf2, ">>> textCommand %s %d %d %d\n", script_h.getStringBuffer() + string_buffer_offset, string_buffer_offset, event_mode, line_enter_status);
+	OutputDebugString(buf2);
+
     while(processText());
+	
+	/*
+	if (_testcount == 1)
+	{
+		while(1) ; 
+	}
+	*/
+
+	_testcount++;
+
+	sprintf(buf2, "<<< textCommand %s %d %d %d\n", script_h.getStringBuffer() + string_buffer_offset, string_buffer_offset, event_mode, line_enter_status);
+	OutputDebugString(buf2);
 
     return RET_CONTINUE;
 }
@@ -958,6 +979,7 @@ bool ONScripterLabel::processText()
         num_chars_in_sentence += 2;
         string_buffer_offset += 2;
 
+		SDL_XXX();
         return true;
     }
     else if (script_h.checkClickstr(&script_h.getStringBuffer()[string_buffer_offset]) == -2) {

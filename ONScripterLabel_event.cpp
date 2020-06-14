@@ -64,7 +64,6 @@
 
 static SDL_TimerID timer_id = NULL;
 static SDL_TimerID break_id = NULL;
-SDL_TimerID timer_cdaudio_id = NULL;
 SDL_TimerID anim_timer_id = NULL;
 
 SDL_TimerID timer_bgmfade_id = NULL;
@@ -105,7 +104,7 @@ extern "C" void oggcallback( void *userdata, Uint8 *stream, int len )
     }
 }
 
-extern "C" Uint32 SDLCALL animCallback( Uint32 interval, void *param )
+extern "C" Uint32 animCallback( Uint32 interval, void *param )
 {
     clearTimer( anim_timer_id );
 
@@ -116,7 +115,7 @@ extern "C" Uint32 SDLCALL animCallback( Uint32 interval, void *param )
     return 0;
 }
 
-extern "C" Uint32 SDLCALL breakCallback(Uint32 interval, void *param)
+extern "C" Uint32 breakCallback(Uint32 interval, void *param)
 {
     clearTimer(break_id);
 
@@ -127,7 +126,7 @@ extern "C" Uint32 SDLCALL breakCallback(Uint32 interval, void *param)
     return 0;
 }
 
-extern "C" Uint32 SDLCALL timerCallback( Uint32 interval, void *param )
+extern "C" Uint32 timerCallback( Uint32 interval, void *param )
 {
     clearTimer( timer_id );
 
@@ -138,18 +137,7 @@ extern "C" Uint32 SDLCALL timerCallback( Uint32 interval, void *param )
     return 0;
 }
 
-extern "C" Uint32 cdaudioCallback( Uint32 interval, void *param )
-{
-    clearTimer( timer_cdaudio_id );
-
-    SDL_Event event;
-    event.type = ONS_CDAUDIO_EVENT;
-    SDL_PushEvent( &event );
-
-    return 0;
-}
-
-extern "C" Uint32 SDLCALL bgmfadeCallback( Uint32 interval, void *param )
+extern "C" Uint32 bgmfadeCallback( Uint32 interval, void *param )
 {
     SDL_Event event;
     event.type = ONS_BGMFADE_EVENT;
@@ -159,7 +147,7 @@ extern "C" Uint32 SDLCALL bgmfadeCallback( Uint32 interval, void *param )
     return interval;
 }
 
-extern "C" Uint32 SDLCALL silentmovieCallback( Uint32 interval, void *param )
+extern "C" Uint32 silentmovieCallback( Uint32 interval, void *param )
 {
 	if (1) {
         clearTimer( timer_silentmovie_id );
@@ -641,7 +629,6 @@ bool ONScripterLabel::mousePressEvent( SDL_MouseButtonEvent *event )
         if ( event->type == SDL_MOUSEBUTTONDOWN )
             current_button_state.down_flag = true;
     }
-#if SDL_VERSION_ATLEAST(1, 2, 5)
     else if ((event->button == SDL_BUTTON_WHEELUP) &&
              ((event_mode & WAIT_TEXT_MODE) ||
               (usewheel_flag && (event_mode & WAIT_BUTTON_MODE)) ||
@@ -660,7 +647,6 @@ bool ONScripterLabel::mousePressEvent( SDL_MouseButtonEvent *event )
             current_button_state.set(-3);
         }
     }
-#endif
     else return false;
 
     if (current_button_state.valid_flag)
@@ -881,7 +867,7 @@ void ONScripterLabel::shiftCursorOnButton( int diff )
             x += clip.x;
             y += clip.y;
         }
-        SDL_WarpMouse(x, y);
+        //SDL_WarpMouse(x, y);
     }
 }
 

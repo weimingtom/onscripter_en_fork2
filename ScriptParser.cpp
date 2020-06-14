@@ -598,6 +598,11 @@ int ScriptParser::parseLine()
         snprintf(script_h.current_cmd, 64, "%s", cmd);
         //Check against user-defined cmds
         if (cmd[0] >= 'a' && cmd[0] <= 'z'){
+			//TODO:
+			char debugstr[256] = {0};
+			sprintf(debugstr, "<<<<<<<< %s\n", cmd); 
+			OutputDebugString(debugstr);
+
             UserFuncHash &ufh = user_func_hash[cmd[0]-'a'];
             UserFuncLUT *uf = ufh.root.next;
             while(uf){

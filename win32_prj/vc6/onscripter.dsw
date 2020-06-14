@@ -15,30 +15,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "SDL_image"=.\SDL_image\SDL_image.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
-Project: "SDL_ttf"=.\SDL_ttf\SDL_ttf.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-}}}
-
-###############################################################################
-
 Project: "onscripter"=.\onscripter\onscripter.dsp - Package Owner=<4>
 
 Package=<5>
@@ -48,13 +24,7 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name SDL_image
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name SDL
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name SDL_ttf
     End Project Dependency
 }}}
 

@@ -14,3 +14,4 @@ Workspace for onscripter_en_fork
 * v3: jpg, png, zlib, bzip2 removed.  
 * v4: freetype removed.  
 * v5: sdl_image only supports bmp.  
+* v6: sdlport2 version, see https://github.com/weimingtom/onscripter_en_fork2_sdlport2  
